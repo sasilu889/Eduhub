@@ -1,0 +1,288 @@
+/* style.css */
+
+/* මූලික සැකසුම් */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6; /* ලා පැහැති පසුබිමක් */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto; /* මධ්‍යගත කිරීම */
+    padding: 20px;
+    flex: 1; /* Content එක මැදට ගැනීමට */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* සියල්ල මැදට ගැනීමට */
+    align-items: center; /* සියල්ල මධ්‍යගත කිරීමට */
+    text-align: center;
+}
+
+/* Header Styling */
+header {
+    background-color: #ffffff;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #3498db;
+}
+
+/* Welcome Section */
+.welcome-section h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.welcome-section h1 span {
+    color: #e74c3c; /* "Eduhub" රතු පාටින් */
+    font-weight: bold;
+}
+
+/* Grade Selection */
+.grade-section p {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.grade-buttons {
+    display: flex;
+    gap: 15px; /* බොත්තම් අතර පරතරය */
+}
+
+.grade-btn {
+    padding: 10px 25px;
+    background-color: #fff;
+    border: 2px solid #3498db;
+    color: #3498db;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.grade-btn:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+/* Motivation Section */
+.motivation-section {
+    margin: 40px 0;
+    width: 100%;
+}
+
+.motivation-box {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    font-style: italic;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Target Section */
+.target-section {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.days-count {
+    background-color: #e67e22; /* තැඹිලි පාටින් */
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 18px;
+    margin-top: 10px;
+    display: inline-block; /* text එක තරමට box එක */
+}
+
+/* subject-page.css */
+
+.subject-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.subject-header h2 {
+    font-size: 28px;
+    color: #2c3e50;
+    border: 2px solid #e74c3c; /* ඔබේ රූප සටහනේ ඇති රතු බෝඩරය වැනි */
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 10px;
+}
+
+.subject-grid {
+    display: grid;
+    /* තීරූ දෙකක් (Columns 2) සෑදීම */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 15px; /* බොත්තම් අතර පරතරය */
+    margin-top: 30px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sub-card {
+    padding: 15px;
+    background-color: #fff;
+    border: 2px solid #e74c3c; /* රතු පාටින් බොත්තම් */
+    border-radius: 15px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sub-card:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* ෆෝන් එකෙන් බලද්දී තනි තීරුවක් ලෙස පෙන්වීමට (Responsive) */
+@media (max-width: 400px) {
+    .subject-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* Subjects Page එකට අදාළ Styling */
+.subject-header h2 {
+    border: 2px solid #ff4d4d;
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.subject-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* තීරු දෙකක් සෑදීම */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.sub-card {
+    padding: 20px;
+    background-color: white;
+    border: 2px solid #ff4d4d;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sub-card:hover {
+    background-color: #ff4d4d;
+    color: white;
+}
+/* Lessons Page Styling */
+.lesson-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.lesson-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.lesson-info h4 {
+    margin: 0;
+    color: #333;
+}
+
+.lesson-info p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.view-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.lesson-container {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.lesson-header-bar {
+    background-color: #fff;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.lesson-header-bar:hover {
+    background-color: #f9f9f9;
+}
+
+.lesson-content {
+    display: none; /* මුලින් සඟවා තබයි */
+    padding: 15px;
+    background-color: #f1f1f1;
+    border-top: 1px solid #ddd;
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    margin-bottom: 10px;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.arrow {
+    transition: transform 0.3s;
+}
+
+.rotate {
+    transform: rotate(180deg); /* ඇරෝ එක උඩට හැරවීමට */
+}

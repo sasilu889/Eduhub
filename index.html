@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduhub - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">Eduhub</div>
+        <button class="menu-btn">Menu ☰</button>
+    </header>
+
+    <main class="container">
+        <section class="welcome-section">
+            <h1>Welcome to <span class="brand-name">Eduhub</span></h1>
+        </section>
+
+<div class="grade-buttons">
+    <a href="subjects.html">
+        <button class="grade-btn">10</button>
+    </a>
+
+    <a href="subjects11.html">
+        <button class="grade-btn">11</button>
+    </a>
+</div>
+
+
+        <section class="motivation-section">
+            <div class="motivation-box">
+                <span class="quote-icon">"</span>
+                <p id="motivation-text">අද දවසේ උපරිම ප්‍රයෝජන ගන්න. ඔබේ ඉලක්කය කරා පියවරක් ඉදිරියට තබන්න!</p>
+            </div>
+        </section>
+
+        <h2 id="days-count">--</h2>
+<p>Days Remaining for O/L Exam</p>
+
+    </main>
+
+    <script>
+      function updateCountdown() {
+    // 1. විභාගය තියෙන දිනය (දෙසැම්බර් 8)
+    const examDate = new Date('2026-12-08').getTime();
+    
+    // 2. අද දවස සහ වෙලාව
+    const now = new Date().getTime();
+    
+    // 3. දින දෙක අතර වෙනස (මිලි තත්පර වලින්)
+    const difference = examDate - now;
+    
+    // 4. මිලි තත්පර දින ගණනට හැරවීම
+    // (1000ms * 60s * 60m * 24h)
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    
+    // 5. HTML එකට දින ගණන ඇතුළත් කිරීම
+    if (days >= 0) {
+        document.getElementById('days-count').innerHTML = days;
+    } else {
+        document.getElementById('days-count').innerHTML = "Exam is ongoing/finished";
+    }
+}
+
+// පිටුව Load වෙද්දීම මේක ක්‍රියාත්මක කරන්න
+updateCountdown();
+
+    
+    </script>
+</body>
+</html>

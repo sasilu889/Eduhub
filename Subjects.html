@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduhub - Subjects</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* සරල styling කිහිපයක් */
+        .subject-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; }
+        .sub-card { padding: 20px; font-size: 18px; cursor: pointer; width: 100%; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; }
+        .sub-card:hover { background: #e0e0e0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Eduhub</div>
+        <a href="home.html"><button class="menu-btn">Back</button></a>
+    </header>
+
+    <main class="container">
+        <section class="subject-header">
+            <h2>Grade 10</h2>
+            <h3>Subjects</h3>
+        </section>
+
+        <div class="subject-grid">
+            <a href="lessons.html?sub=science"><button class="sub-card">විද්‍යාව</button></a>
+            <a href="lessons.html?sub=maths"><button class="sub-card">ගණිතය</button></a>
+            <a href="lessons.html?sub=history"><button class="sub-card">ඉතිහාසය</button></a>
+            <a href="lessons.html?sub=ict"><button class="sub-card">ICT</button></a>
+            <a href="lessons.html?sub=english"><button class="sub-card">ඉංග්‍රීසි</button></a>
+            <a href="lessons.html?sub=sinhala"><button class="sub-card">සිංහල</button></a>
+              <a href="lessons.html?sub=commerce"><button class="sub-card">ව්‍යාපාර හා ගිණුම්කරනය</button></a>
+               <a href="lessons.html?sub=religious"><button class="sub-card">ආගම</button></a>
+            
+        </div>
+    </main>
+
+</body>
+</html>

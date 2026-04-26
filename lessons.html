@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduhub - Lessons</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; margin: 0; }
+        header { background: #333; color: white; padding: 15px; display: flex; align-items: center; }
+        .menu-btn { background: #555; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 5px; }
+        .lesson-container { padding: 20px; max-width: 800px; margin: auto; }
+        .lesson-item { 
+            background: #fff; margin-bottom: 15px; padding: 20px; 
+            border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .btn-video { background: #ff0000; color: white; padding: 10px; border-radius: 5px; cursor: pointer; border: none; }
+        
+        /* Video Popup (Modal) Styling */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
+        
+        .modal-content { 
+            position: relative; 
+            margin: auto; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            width: 95%; 
+            max-width: 800px; 
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .close-btn { 
+            color: white; 
+            font-size: 35px; 
+            position: absolute; 
+            top: -45px; 
+            right: 0; 
+            cursor: pointer; 
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button onclick="history.back()" class="menu-btn">Back</button>
+        <h2 id="display-subject-name" style="text-align:center; flex-grow: 1;">විෂය නම</h2>
+    </header>
+
+    <main class="lesson-container" id="lesson-container"></main>
+
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeVideo()">&times;</span>
+            <div class="video-container">
+                <iframe id="videoPlayer" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const lessonData = {
+            'science': {
+                name: 'විද්‍යාව',
+                list: [
+                    { title: 'physics පැය 10ක්', videoId: 'sViszbHcE8g', note: 'sci1.pdf' },
+                    { title: 'නිවුටන් නියම,ඝර්ශනය', videoId: 'I_t-JigWp_s', note: '#' }, // මෙතන කොමාව (,) දැම්මා
+            { title: 'සරල රේඛීය  චලිතය' ,videoId: '2vCmXZWuGIE', note: '#' },
+                    { title: 'රසායන විද්‍යාව', videoId: 'yHILiDhQSYI', note: 'sci2.pdf' },
+                    { title: 'මවුල', videoId: 'O0hG8zA9sPs', note: 'sci3.pdf' },
+               { title: 'biology අග සිට මුලට' ,videoId: 'Gdh6qp54Zwk', note: '#' },
+                    
+                ]
+            },
+            'maths': {
+                name: 'ගණිතය',
+                list: [
+                    { title: 'වර්ගඵලය', videoId: 'VIDEO_ID_HERE', note: 'math1.pdf' }
+                ]
+            },
+            'history': {
+                name: 'ඉතිහාසය',
+                list: [
+                    { title: 'ඉතිහාසය හැදෑරීමේ මූලශ්‍ර', videoId: 'vidio_id_here', note: 'history1.pdf' }
+                ]
+            },
+            'ict': {
+                name: 'ICT',
+                list: [
+                    { title: 'පරිගණකයේ ඉතිහාසය', videoId: 'video_id', note: 'ict1.pdf' }
+                ]
+            },
+            'english': {
+                name: 'English',
+                list: [
+                    { title: 'Bar chart', videoId: 'c9VWVgH6zrM', note: '#' },
+                    { title:'NOTICE',videoId:'sl7RVmrzes8',note:'#'},
+                   { title:'Found Notice,Invitation',videoId:'hPsRYfBRIRU',note:'#'},
+                  { title:'Lost Notice,E-mail',videoId:'3n196_KsHK0',note:'#'},
+                   { title:'If Clause ep.1',videoId:'k-XclZul74g',note:'#'},
+                  { title:'If Clause ep.2',videoId:'aqvI1iZL4ZI',note:'#'},
+                   { title:'ANNOUNCEMENT part-1',videoId:'fjXTTHnbKfI',note:'#'},
+                   { title:'ANNOUNCEMENT PART-2',videoId:'xWNoxTY3XiI',note:'#'},
+                 { title:'Clauses(Relative pronouns)',videoId:'O26fydBn-8U',note:'#'},
+                ]
+            },
+            'sinhala': {
+                name: 'සිංහල',
+                list: [
+                    { title: 'සත්‍ර කන් මන්ට්‍රණය', videoId: 'id_eka', note: '#' }
+                ]
+            },
+            'commerce': {
+                name: 'ව්‍යාපාර හා ගිණුම්කරණය',
+                list: [
+                    { title: '01.ව්‍යාපාර පසුබිම', videoId: '5LOiQhqB6CQ', note: '#' },
+                    { title: '02.ව්‍යාපාර පරිසරය', videoId: 'UHvuohBiTTY', note: '#' },
+                    { title: '03.ව්‍යාපාර සංවිධාන.ep-1', videoId: 'JqyROfEztAU', note: '#' },
+                    { title: '03.ව්‍යාපාර සංවිධාන.ep-2', videoId: '2ic7YQDsofk', note: '#' },
+                    { title: '04.ගිණුම්කරණය හැදින්වීම', videoId: 'Hp2KcXoC3MY', note: '#' },
+                    { title: '05.ගිණුම්කරණ සමීකරණය', videoId: 'SA8mJ1WbC7g', note: '#' },
+                    { title: '06.ගණුදෙනුවල ද්විත්ව බලපෑම', videoId: 'eLTTDmuOqc8', note: '#' },
+                    { title: '07.මූලික සටහන් පොත්', videoId: 'kp3KUkHnG-c', note: '#' },
+                    { title: '08.මුදල්පොත හා සුලු මුදල් පොත ep.1', videoId: '8x1vDcC_C_Q', note: '#' },
+                    { title: '08.මුදල්පොත හා සුලු මුදල් පොත ep2', videoId: 'MvaJs1Ip7Os', note: '#' },
+                    { title: '08.මුදල්පොත හා සුලු මුදල් පොත ep.3', videoId: 'jKWP21XLs7w', note: '#' },
+                    { title: '09.බැංකු සැසදුම් ep.1', videoId: 'Fx-Bvm-x3D4', note: '#' },
+                    { title: '09.බැංකු සැසදුම් ep.2', videoId: '-hDKptF8HlQ', note: '#' },
+                    { title: '10.ජ"නල්', videoId: 'fjp2jfNwgLY', note: '#' },
+                    { title: '11.ශේෂ පිරික්සුම', videoId: '-Bxas8-jXLY', note: '#' },
+                    { title: '12.ගිණුම්කරණ වැරදි නිවැරදි කිරීම් ep.1', videoId: 'Pm4oHWapfHE', note: '#' },
+                    { title: '12.ගිණුම්කරණ වැරදි නිවැරදි කිරීම ep.2', videoId: 'Ei33kjOy1G4', note: '#' },
+                    { title: '12.ගිණුම්කරණ වැරදි නිවැරදි කිරීම ep.3', videoId: 'o2c0Dl3o3EE', note: '#' }
+                ]
+            },
+            'religious': {
+                name: 'ආගම',
+                list: [
+         { title: '10වසර  පෙලපොතම කෙටියෙන්',videoId:'P0Il1yhh4X0', note: '#' }
+                ]
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const selectedSub = params.get('sub');
+        const container = document.getElementById('lesson-container');
+
+        if (lessonData[selectedSub]) {
+            document.getElementById('display-subject-name').innerText = lessonData[selectedSub].name;
+
+            lessonData[selectedSub].list.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'lesson-item';
+                div.innerHTML = `
+                    <span>${item.title}</span>
+                    <div>
+                        <button class="btn-video" onclick="openVideo('${item.videoId}')">Watch Video</button>
+                        <a href="${item.note}" class="menu-btn" style="text-decoration:none; background:#007bff; color:white; padding:10px; border-radius:5px;">Note</a>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        } else {
+            container.innerHTML = "<p style='text-align:center;'>කරුණාකර විෂයක් තෝරා නැවත පැමිණෙන්න.</p>";
+        }
+
+        function openVideo(id) {
+            if(id && id.length > 5 && id !== 'id_eka' && id !== 'video_id' && id !== 'vidio_id_here' && id !== 'VIDEO_ID_HERE') {
+                document.getElementById('videoPlayer').src = "https://www.youtube.com/embed/" + id + "?rel=0&autoplay=1";
+                document.getElementById('videoModal').style.display = "block";
+            } else {
+                alert("මෙම වීඩියෝව තවමත් යාවත්කාලීන කර නැත.");
+            }
+        }
+
+        function closeVideo() {
+            document.getElementById('videoModal').style.display = "none";
+            document.getElementById('videoPlayer').src = "";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target == modal) {
+                closeVideo();
+            }
+        }
+    </script>
+</body>
+</html>

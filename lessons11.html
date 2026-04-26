@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduhub - Lessons</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; margin: 0; }
+        header { background: #333; color: white; padding: 15px; display: flex; align-items: center; }
+        .menu-btn { background: #555; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 5px; }
+        .lesson-container { padding: 20px; max-width: 800px; margin: auto; }
+        .lesson-item { 
+            background: #fff; margin-bottom: 15px; padding: 20px; 
+            border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .btn-video { background: #ff0000; color: white; padding: 10px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; }
+        
+        /* Modal Styling */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
+        .modal-content { position: relative; margin: 15% auto; width: 90%; max-width: 700px; }
+        .close-btn { color: white; font-size: 35px; position: absolute; top: -45px; right: 0; cursor: pointer; font-weight: bold; }
+        iframe { width: 100%; height: 350px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        
+        /* Note Button Styling */
+        .note-link { text-decoration:none; background:#007bff; color:white; padding:10px 15px; border-radius:5px; margin-left: 5px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button onclick="history.back()" class="menu-btn">Back</button>
+        <h2 id="display-subject-name" style="text-align:center; flex-grow: 1; margin:0;">විෂය නම</h2>
+    </header>
+
+    <main class="lesson-container" id="lesson-container"></main>
+
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeVideo()">&times;</span>
+            <iframe id="videoPlayer" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // දත්ත ඇතුළත් කිරීම
+        // Embed කළ නොහැකි වීඩියෝ සඳහා canEmbed: false ලෙස දමන්න
+        const lessonData = {
+            'science': {
+                name: 'විද්‍යාව',
+                list: [
+                    { title: 'physics පැය 10ක්', videoId: 'sViszbHcE8g', canEmbed: true, note: 'notes/sci1.pdf' },
+                    { title: 'රසායන විද්‍යාව', videoId: 'yHILiDhQSYI', canEmbed: true, note: 'notes/sci2.pdf' },
+                    { title: 'මවුල', videoId: 'O0hG8zA9sPs', canEmbed: true, note: 'notes/sci3.pdf' }
+                ]
+            },
+            'maths': {
+                name: 'ගණිතය',
+                list: [
+                    { title: 'වර්ගඵලය', videoId: 'dQw4w9WgXcQ', canEmbed: true, note: 'notes/math1.pdf' }
+                ]
+            },
+            'commerce': {
+                name: 'ව්‍යාපාර හා ගිණුම්කරණය',
+                list: [
+                    { title: 'ව්‍යාපාර සංකල්පය 1', videoId: '5LOiQhqB6CQ', canEmbed: true, note: '#' },
+                    { title: 'ව්‍යාපාර සංකල්පය 2', videoId: 'UHvuohBiTTY', canEmbed: true, note: '#' },
+                    { title: 'ව්‍යාපාර සංවිධාන ep.1', videoId: 'JqyROfEztAU', canEmbed: true, note: '#' },
+                    { title: 'ව්‍යාපාර සංවිධාන ep.2', videoId: '2ic7YQDsofk', canEmbed: false, note: '#' } // මේක Embed බෑ කියලා හිතමු
+                ]
+            }
+            // අනෙක් විෂයන් මෙතැනට එකතු කරන්න...
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const selectedSub = params.get('sub');
+        const container = document.getElementById('lesson-container');
+
+        if (lessonData[selectedSub]) {
+            document.getElementById('display-subject-name').innerText = lessonData[selectedSub].name;
+
+            lessonData[selectedSub].list.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'lesson-item';
+                
+                // වීඩියෝ එක ප්ලේ කරන ආකාරය තීරණය කිරීම
+                let videoAction;
+                if(item.canEmbed === false) {
+                    // Embed කරන්න බැරි නම් YouTube එකට කෙලින්ම යවනවා
+                    videoAction = `window.open('https://www.youtube.com/watch?v=${item.videoId}', '_blank')`;
+                } else {
+                    // Embed පුළුවන් නම් අපේ Modal එකේ පෙන්වනවා
+                    videoAction = `openVideo('${item.videoId}')`;
+                }
+
+                div.innerHTML = `
+                    <span>${item.title}</span>
+                    <div>
+                        <button class="btn-video" onclick="${videoAction}">Watch Video</button>
+                        <a href="${item.note}" target="_blank" class="note-link">Note</a>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        } else {
+            container.innerHTML = "<p style='text-align:center;'>කරුණාකර විෂයක් තෝරා නැවත පැමිණෙන්න.</p>";
+        }
+
+        function openVideo(id) {
+            if(id && id !== 'id_eka' && id !== 'video_id') {
+                const player = document.getElementById('videoPlayer');
+                player.src = "https://www.youtube.com/embed/" + id + "?autoplay=1";
+                document.getElementById('videoModal').style.display = "block";
+            } else {
+                alert("මෙම වීඩියෝව තවමත් යාවත්කාලීන කර නැත.");
+            }
+        }
+
+        function closeVideo() {
+            document.getElementById('videoModal').style.display = "none";
+            document.getElementById('videoPlayer').src = "";
+        }
+
+        // Modal එකෙන් පිටත Click කළොත් Close වෙන්න
+        window.onclick = function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target == modal) {
+                closeVideo();
+            }
+        }
+    </script>
+</body>
+</html>
